@@ -1,0 +1,365 @@
+Index: mprog.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># -*- coding: utf-8 -*-\r\n\"\"\"\r\nCreated on Tue Nov 22 12:03:57 2022\r\n\r\n@author: Юрий\r\n\"\"\"\r\n\r\nimport warnings\r\nwarnings.simplefilter(action='ignore', category=FutureWarning) \r\n\r\nfrom os.path import join\r\nimport pathlib\r\nimport pandas as pd\r\n# import numpy as np\r\n# from pandas_datareader.data import DataReader\r\n# import matplotlib.pyplot as plt\r\n# from matplotlib.ticker import MaxNLocator\r\nfrom pandas.core.common import SettingWithCopyWarning\r\nimport moexlib.mlib as moexl\r\n\r\nwarnings.simplefilter(action=\"ignore\", category=SettingWithCopyWarning)\r\n# Период времени\r\nstart_date = '2022-08-01'\r\nend_date = '2022-08-31'\r\n\r\npath = r'c:\\stock data' # корневой каталог для сохрания информации\r\nmoex_dest = join(path, start_date+ \"_\"+ end_date,'moexdata') # каталог для индексов МосБиржи\r\ndata_dest= join(path, start_date+ \"_\"+ end_date,'data') # каталог для хранения информации о инструментах\r\nprocessed_dest = join(path, start_date+ \"_\"+ end_date,'processed') # каталог для хранения обработанных данных инструментов\r\nticks_path = join(path, 'SECID' + '.txt') # путь для файла со списком инструментов\r\n\r\nmoexl.dmei(moex_dest, start_date, end_date)\r\n\r\n'''  Список secid инструментов '''\r\ninstrument_tickers=[\"ABRD\",\"ACKO\",\"AFKS\",\"AFLT\",\"AGRO\",\"AKRN\"] \r\nmoexl.qoutes_download(instrument_tickers, data_dest, start_date, end_date)\r\n# pathlib.Path(data_dest).mkdir(parents=True, exist_ok=True)\r\n# arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW', 'VOLUME']\r\n\r\n# for instrument_ticker in instrument_tickers:\r\n#     data = DataReader(instrument_ticker,\r\n#             'moex',\r\n#             start=start_date,\r\n#             end= end_date,\r\n#         )\r\n#     dest = join(data_dest, instrument_ticker + '.csv')\r\n#     print(\"Writing %s -> %s\" % (instrument_ticker, dest))\r\n#     data.to_csv(dest, index_label='day',\r\n#                 columns = arguments, encoding='utf-8-sig')\r\n    \r\npathlib.Path(processed_dest).mkdir(parents=True, exist_ok=True)\r\n'''\r\nДля тестирования в переменную instrument_tickers вносим secid инструментов.\r\nДля анализа большего числа инструментов, secid хранятся в файле secid.txt.\r\nПример получения secid\r\nwith open(ticks_path, \"r\") as instrument_tickers:\r\n   instrument_tickers = [line.rstrip() for line in instrument_tickers]\r\n'''\r\n# instrument_tickers=[\"ABRD\",\"ACKO\",\"AFKS\",\"AFLT\",\"AGRO\",\"AKRN\"]\r\ndft = pd.DataFrame()\r\n\r\nfor instrument_ticker in instrument_tickers:\r\n    df = pd.read_csv (join(data_dest, instrument_ticker + '.csv'),sep=',')\r\n    if df.isnull().values.any():\r\n        print(\"Empty period\")\r\n    else:\r\n        dft =  moexl.qoutes_descr(df, instrument_ticker, processed_dest, dft)\r\ndest_all = join(processed_dest,'rpc_all' + '.csv')\r\ndest_corr = join(processed_dest,'correlation' + '.csv')\r\ndft['day'] = df['day']\r\ndft.set_index(\"day\", inplace=True)\r\ndft.to_csv(dest_all, encoding='utf-8-sig')\r\ndft.corr().to_csv(dest_corr, encoding='utf-8-sig')\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/mprog.py b/mprog.py
+--- a/mprog.py	(revision 2f62089a8e568c62625e7b8605a5d1a5d31a35a1)
++++ b/mprog.py	(date 1669110785184)
+@@ -6,9 +6,10 @@
+ """
+ 
+ import warnings
+-warnings.simplefilter(action='ignore', category=FutureWarning) 
++
++warnings.simplefilter(action='ignore', category=FutureWarning)
+ 
+-from os.path import join
++from os.path import join, isdir
+ import pathlib
+ import pandas as pd
+ # import numpy as np
+@@ -23,33 +24,30 @@
+ start_date = '2022-08-01'
+ end_date = '2022-08-31'
+ 
+-path = r'c:\stock data' # корневой каталог для сохрания информации
+-moex_dest = join(path, start_date+ "_"+ end_date,'moexdata') # каталог для индексов МосБиржи
+-data_dest= join(path, start_date+ "_"+ end_date,'data') # каталог для хранения информации о инструментах
+-processed_dest = join(path, start_date+ "_"+ end_date,'processed') # каталог для хранения обработанных данных инструментов
+-ticks_path = join(path, 'SECID' + '.txt') # путь для файла со списком инструментов
++path = r'c:\stock data'  # корневой каталог для сохрания информации
++moex_dest = join(path, start_date + "_" + end_date, 'moexdata')  # каталог для индексов МосБиржи
++data_dest = join(path, start_date + "_" + end_date, 'data')  # каталог для хранения информации о инструментах
++processed_dest = join(path, start_date + "_" + end_date,
++                      'processed')  # каталог для хранения обработанных данных инструментов
++ticks_path = join(path, 'SECID' + '.txt')  # путь для файла со списком инструментов
+ 
+-moexl.dmei(moex_dest, start_date, end_date)
++if isdir(moex_dest):
++    print("moex and moex10")
++else:
++    moexl.dmei(moex_dest, start_date, end_date)
+ 
+ '''  Список secid инструментов '''
+-instrument_tickers=["ABRD","ACKO","AFKS","AFLT","AGRO","AKRN"] 
+-moexl.qoutes_download(instrument_tickers, data_dest, start_date, end_date)
+-# pathlib.Path(data_dest).mkdir(parents=True, exist_ok=True)
+-# arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW', 'VOLUME']
++instrument_tickers = ["ABRD", "ACKO", "AFKS", "AFLT", "AGRO", "AKRN"]
++if isdir(data_dest):
++    print("all is good")
++else:
++    moexl.qoutes_download(instrument_tickers, data_dest, start_date, end_date)
+ 
+-# for instrument_ticker in instrument_tickers:
+-#     data = DataReader(instrument_ticker,
+-#             'moex',
+-#             start=start_date,
+-#             end= end_date,
+-#         )
+-#     dest = join(data_dest, instrument_ticker + '.csv')
+-#     print("Writing %s -> %s" % (instrument_ticker, dest))
+-#     data.to_csv(dest, index_label='day',
+-#                 columns = arguments, encoding='utf-8-sig')
+-    
+-pathlib.Path(processed_dest).mkdir(parents=True, exist_ok=True)
+-'''
++if isdir(processed_dest):
++    print("No need to process")
++else:
++    pathlib.Path(processed_dest).mkdir(parents=True, exist_ok=True)
++    '''
+ Для тестирования в переменную instrument_tickers вносим secid инструментов.
+ Для анализа большего числа инструментов, secid хранятся в файле secid.txt.
+ Пример получения secid
+@@ -57,20 +55,22 @@
+    instrument_tickers = [line.rstrip() for line in instrument_tickers]
+ '''
+ # instrument_tickers=["ABRD","ACKO","AFKS","AFLT","AGRO","AKRN"]
+-dft = pd.DataFrame()
+-
+-for instrument_ticker in instrument_tickers:
+-    df = pd.read_csv (join(data_dest, instrument_ticker + '.csv'),sep=',')
+-    if df.isnull().values.any():
+-        print("Empty period")
+-    else:
+-        dft =  moexl.qoutes_descr(df, instrument_ticker, processed_dest, dft)
+-dest_all = join(processed_dest,'rpc_all' + '.csv')
+-dest_corr = join(processed_dest,'correlation' + '.csv')
+-dft['day'] = df['day']
+-dft.set_index("day", inplace=True)
+-dft.to_csv(dest_all, encoding='utf-8-sig')
+-dft.corr().to_csv(dest_corr, encoding='utf-8-sig')
+-
+-
+-
++
++    dft = pd.DataFrame()
++    for instrument_ticker in instrument_tickers:
++        df = pd.read_csv(join(data_dest, instrument_ticker + '.csv'), sep=',')
++        if df.isnull().values.any():
++            print("Empty period")
++        else:
++            dft = moexl.qoutes_descr(df, instrument_ticker, processed_dest, dft)
++    dest_all = join(processed_dest, 'rpc_all' + '.csv')
++    dest_corr = join(processed_dest, 'correlation' + '.csv')
++    dft['day'] = df['day']
++    dft.set_index("day", inplace=True)
++    dft.to_csv(dest_all, encoding='utf-8-sig')
++    dft.corr().to_csv(dest_corr, encoding='utf-8-sig')
++'''
++Plot 
++'''
++rpc_dest = join(processed_dest, 'rpc_all' + '.csv')
++moexl.plot_rpc(rpc_dest)
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1669109279847)
++++ b/.idea/misc.xml	(date 1669109279847)
+@@ -0,0 +1,4 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1669109279898)
++++ b/.idea/vcs.xml	(date 1669109279898)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1669109282053)
++++ b/.idea/.gitignore	(date 1669109282053)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: .idea/inspectionProfiles/profiles_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/profiles_settings.xml b/.idea/inspectionProfiles/profiles_settings.xml
+new file mode 100644
+--- /dev/null	(date 1669109279986)
++++ b/.idea/inspectionProfiles/profiles_settings.xml	(date 1669109279986)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <settings>
++    <option name="USE_PROJECT_PROFILE" value="false" />
++    <version value="1.0" />
++  </settings>
++</component>
+\ No newline at end of file
+Index: .idea/moex.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/moex.iml b/.idea/moex.iml
+new file mode 100644
+--- /dev/null	(date 1669109279667)
++++ b/.idea/moex.iml	(date 1669109279667)
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="PYTHON_MODULE" version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++  <component name="PyDocumentationSettings">
++    <option name="format" value="PLAIN" />
++    <option name="myDocStringFormat" value="Plain" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1669109279741)
++++ b/.idea/modules.xml	(date 1669109279741)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/moex.iml" filepath="$PROJECT_DIR$/.idea/moex.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: moexlib/mlib.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># -*- coding: utf-8 -*-\r\n\"\"\"\r\nCreated on Tue Nov 22 11:55:05 2022\r\n\r\n@author: Юрий\r\n\"\"\"\r\nfrom os.path import join\r\nimport pathlib\r\nimport pandas as pd\r\nimport numpy as np\r\nfrom pandas_datareader.data import DataReader\r\n\r\ndef dmei(moex_dest, start_date, end_date):\r\n    '''\r\nDownloading Moscow Exchange indices\r\nmoex_dest - catalog for Moscow Exchange indices\r\nstart_date - period start date\r\nend_date - period end date\r\n    '''\r\n    pathlib.Path(moex_dest).mkdir(parents=True, exist_ok=True)\r\n    tickers=[\"IMOEX\",\"MOEX10\"]\r\n    arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', \r\n                 'HIGH', 'LOW','MEAN','RPC']\r\n    for ticker in tickers:\r\n        data = DataReader(\r\n            ticker,\r\n            'moex',\r\n            start=start_date,\r\n            end=end_date,\r\n        )\r\n    data = data[['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW']]\r\n    data['MEAN'] = np.array(data.iloc[:,2:5].mean(1))\r\n    data['RPC'] = 0\r\n    data.iloc[1:,7] = [ (data.iloc[i,6]-data.iloc[i-1,6])/data.iloc[i-1,6] \r\n                for i in range(1,data.shape[0]) ]\r\n    dest = join(moex_dest, ticker + '.csv')\r\n    print(\"Writing %s -> %s\" % (ticker, moex_dest))\r\n    data.to_csv(dest, index_label='day', \r\n                columns = arguments, encoding='utf-8-sig') \r\n\r\ndef qoutes_download(instrument_tickers, data_dest, start_date, end_date):\r\n    '''\r\n    Dowload and processing of instrument data\r\n    '''\r\n    pathlib.Path(data_dest).mkdir(parents=True, exist_ok=True)\r\n    arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW', 'VOLUME']\r\n\r\n    for instrument_ticker in instrument_tickers:\r\n        data = DataReader(instrument_ticker,\r\n            'moex',\r\n            start=start_date,\r\n            end= end_date,\r\n        )\r\n        dest = join(data_dest, instrument_ticker + '.csv')\r\n        print(\"Writing %s -> %s\" % (instrument_ticker, dest))\r\n        data.to_csv(dest, index_label='day', columns = arguments, encoding='utf-8-sig')\r\n    \r\n\r\ndef qoutes_descr(data, ticker, path, data_all):\r\n    '''\r\n    путь для сохранения фалов\r\n    '''\r\n    dest = join(path, ticker +'_processed' + '.csv')\r\n    dest1 = join(path,'descr_all' + '.csv')\r\n    '''\r\n    Средняя цена за день (MEAN)и \r\n    относительное изменением цены дня по отношению к предыдущему дню (RPC)\r\n    '''\r\n    data['MEAN'] = np.array(data.iloc[:,3:6].mean(1))\r\n    data['RPC'] = 0\r\n    data.iloc[1:,9] = [(data.iloc[i,8]-data.iloc[i-1,8])/data.iloc[i-1,8] \r\n                for i in range(1,data.shape[0]) ]\r\n    print(\"Writing %s -> %s\" % (ticker, dest))\r\n    data.to_csv(dest, index = False, encoding='utf-8-sig')\r\n    '''\r\n    Среднее значение (Mean), с.к.о. (Std), несимметричность (Skew),\r\n    коэффициент эксцесса (островершинность) (kurtosis),\r\n    относительное изменение за весь период (Rpc_all).   \r\n    '''\r\n    df1 = pd.DataFrame(data={'Secid':[data.iloc[0,1]],\r\n         'Mean': [data['MEAN'].mean()], \r\n         'Std':[data['MEAN'].std()],\r\n         'Skew': [data['MEAN'].skew()], \r\n         'kurtosis': [data['MEAN'].kurtosis()],\r\n         'Rpc_all': [(data.iloc[-1,8]-data.iloc[0,8])/data.iloc[0,8]]})\r\n\r\n    print(\"Writing descr%s -> %s\" % (ticker, dest))\r\n    if pathlib.Path(dest1).is_file():\r\n        df1.to_csv(dest1, mode='a', header=False, index = False,\r\n                   encoding='utf-8-sig')\r\n    else:\r\n        df1.to_csv(dest1, index = False, encoding='utf-8-sig')\r\n    data_all[data['SHORTNAME'][0]]=data.iloc[:,9]\r\n    return data_all\r\n\r\n\r\n\r\n    \r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/moexlib/mlib.py b/moexlib/mlib.py
+--- a/moexlib/mlib.py	(revision 2f62089a8e568c62625e7b8605a5d1a5d31a35a1)
++++ b/moexlib/mlib.py	(date 1669110328235)
+@@ -9,6 +9,9 @@
+ import pandas as pd
+ import numpy as np
+ from pandas_datareader.data import DataReader
++import matplotlib.pyplot as plt
++from matplotlib.ticker import MaxNLocator
++
+ 
+ def dmei(moex_dest, start_date, end_date):
+     '''
+@@ -18,9 +21,9 @@
+ end_date - period end date
+     '''
+     pathlib.Path(moex_dest).mkdir(parents=True, exist_ok=True)
+-    tickers=["IMOEX","MOEX10"]
+-    arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', 
+-                 'HIGH', 'LOW','MEAN','RPC']
++    tickers = ["IMOEX", "MOEX10"]
++    arguments = ['SECID', 'SHORTNAME', 'OPEN', 'CLOSE',
++                 'HIGH', 'LOW', 'MEAN', 'RPC']
+     for ticker in tickers:
+         data = DataReader(
+             ticker,
+@@ -28,71 +31,80 @@
+             start=start_date,
+             end=end_date,
+         )
+-    data = data[['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW']]
+-    data['MEAN'] = np.array(data.iloc[:,2:5].mean(1))
++    data = data[['SECID', 'SHORTNAME', 'OPEN', 'CLOSE', 'HIGH', 'LOW']]
++    data['MEAN'] = np.array(data.iloc[:, 2:5].mean(1))
+     data['RPC'] = 0
+-    data.iloc[1:,7] = [ (data.iloc[i,6]-data.iloc[i-1,6])/data.iloc[i-1,6] 
+-                for i in range(1,data.shape[0]) ]
++    data.iloc[1:, 7] = [(data.iloc[i, 6] - data.iloc[i - 1, 6]) / data.iloc[i - 1, 6]
++                        for i in range(1, data.shape[0])]
+     dest = join(moex_dest, ticker + '.csv')
+     print("Writing %s -> %s" % (ticker, moex_dest))
+-    data.to_csv(dest, index_label='day', 
+-                columns = arguments, encoding='utf-8-sig') 
++    data.to_csv(dest, index_label='day',
++                columns=arguments, encoding='utf-8-sig')
+ 
++
+ def qoutes_download(instrument_tickers, data_dest, start_date, end_date):
+     '''
+     Dowload and processing of instrument data
+     '''
+     pathlib.Path(data_dest).mkdir(parents=True, exist_ok=True)
+-    arguments = ['SECID','SHORTNAME','OPEN', 'CLOSE', 'HIGH', 'LOW', 'VOLUME']
++    arguments = ['SECID', 'SHORTNAME', 'OPEN', 'CLOSE', 'HIGH', 'LOW', 'VOLUME']
+ 
+     for instrument_ticker in instrument_tickers:
+         data = DataReader(instrument_ticker,
+-            'moex',
+-            start=start_date,
+-            end= end_date,
+-        )
++                          'moex',
++                          start=start_date,
++                          end=end_date,
++                          )
+         dest = join(data_dest, instrument_ticker + '.csv')
+         print("Writing %s -> %s" % (instrument_ticker, dest))
+-        data.to_csv(dest, index_label='day', columns = arguments, encoding='utf-8-sig')
+-    
++        data.to_csv(dest, index_label='day', columns=arguments, encoding='utf-8-sig')
++
+ 
+ def qoutes_descr(data, ticker, path, data_all):
+     '''
+     путь для сохранения фалов
+     '''
+-    dest = join(path, ticker +'_processed' + '.csv')
+-    dest1 = join(path,'descr_all' + '.csv')
++    dest = join(path, ticker + '_processed' + '.csv')
++    dest1 = join(path, 'descr_all' + '.csv')
+     '''
+     Средняя цена за день (MEAN)и 
+     относительное изменением цены дня по отношению к предыдущему дню (RPC)
+     '''
+-    data['MEAN'] = np.array(data.iloc[:,3:6].mean(1))
++    data['MEAN'] = np.array(data.iloc[:, 3:6].mean(1))
+     data['RPC'] = 0
+-    data.iloc[1:,9] = [(data.iloc[i,8]-data.iloc[i-1,8])/data.iloc[i-1,8] 
+-                for i in range(1,data.shape[0]) ]
++    data.iloc[1:, 9] = [(data.iloc[i, 8] - data.iloc[i - 1, 8]) / data.iloc[i - 1, 8]
++                        for i in range(1, data.shape[0])]
+     print("Writing %s -> %s" % (ticker, dest))
+-    data.to_csv(dest, index = False, encoding='utf-8-sig')
++    data.to_csv(dest, index=False, encoding='utf-8-sig')
+     '''
+     Среднее значение (Mean), с.к.о. (Std), несимметричность (Skew),
+     коэффициент эксцесса (островершинность) (kurtosis),
+     относительное изменение за весь период (Rpc_all).   
+     '''
+-    df1 = pd.DataFrame(data={'Secid':[data.iloc[0,1]],
+-         'Mean': [data['MEAN'].mean()], 
+-         'Std':[data['MEAN'].std()],
+-         'Skew': [data['MEAN'].skew()], 
+-         'kurtosis': [data['MEAN'].kurtosis()],
+-         'Rpc_all': [(data.iloc[-1,8]-data.iloc[0,8])/data.iloc[0,8]]})
++    df1 = pd.DataFrame(data={'Secid': [data.iloc[0, 1]],
++                             'Mean': [data['MEAN'].mean()],
++                             'Std': [data['MEAN'].std()],
++                             'Skew': [data['MEAN'].skew()],
++                             'kurtosis': [data['MEAN'].kurtosis()],
++                             'Rpc_all': [(data.iloc[-1, 8] - data.iloc[0, 8]) / data.iloc[0, 8]]})
+ 
+     print("Writing descr%s -> %s" % (ticker, dest))
+     if pathlib.Path(dest1).is_file():
+-        df1.to_csv(dest1, mode='a', header=False, index = False,
++        df1.to_csv(dest1, mode='a', header=False, index=False,
+                    encoding='utf-8-sig')
+     else:
+-        df1.to_csv(dest1, index = False, encoding='utf-8-sig')
+-    data_all[data['SHORTNAME'][0]]=data.iloc[:,9]
++        df1.to_csv(dest1, index=False, encoding='utf-8-sig')
++    data_all[data['SHORTNAME'][0]] = data.iloc[:, 9]
+     return data_all
+ 
+ 
+-
+-    
++def plot_rpc(rpc_dest, angle=45):
++    df_rpc = pd.read_csv(rpc_dest, sep=',', index_col=False)
++    df_rpc.set_index("day", inplace=True)
++    list1 = [df_rpc.index.to_list()[i][5:] for i in range(len(df_rpc.index))]
++    for i in range(df_rpc.shape[1]):
++        plt.plot(list1, df_rpc.iloc[:, i], 'd-')
++        plt.xticks(rotation=angle)
++        plt.title(df_rpc.columns[i])
++        plt.grid(True)
++        plt.show()
