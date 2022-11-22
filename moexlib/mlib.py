@@ -93,6 +93,17 @@ def qoutes_descr(data, ticker, path, data_all):
     data_all[data['SHORTNAME'][0]]=data.iloc[:,9]
     return data_all
 
-
+def plot_rpc(rpc_dest, angle = 45):
+    df_rpc = pd.read_csv (rpc_dest,sep=',',index_col = False)
+    df_rpc.set_index("day", inplace=True)
+    list1 = [df_rpc.index.to_list()[i][5:] for i in range(len(df_rpc.index))]
+    for i in range(df_rpc.shape[1]):
+        #plt.plot(range(df_rpc.shape[0]),df_rpc.iloc[:,i],'d-')
+        #plt.rcParams['figure.figsize'] = [10,5]
+        plt.plot(list1,df_rpc.iloc[:,i],'d-')
+        plt.xticks(rotation = angle)
+        plt.title(df_rpc.columns[i])
+        plt.grid(True)
+        plt.show()
 
     

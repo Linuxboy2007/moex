@@ -8,7 +8,7 @@ Created on Tue Nov 22 12:03:57 2022
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning) 
 
-from os.path import join
+from os.path import join, isdir
 import pathlib
 import pandas as pd
 # import numpy as np
