@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e9457da-9b85-4e88-9718-966d1e0af118" name="Changes" comment="plot rpc">
-      <change beforePath="$PROJECT_DIR$/moexlib/mlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/moexlib/mlib.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mprog.py" beforeDir="false" afterPath="$PROJECT_DIR$/mprog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +48,28 @@
       <option name="project" value="LOCAL" />
       <updated>1669111182385</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="plot rpc">
+      <created>1669111669872</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669111669872</updated>
+    </task>
+    <task id="LOCAL-00003" summary="plot rpc">
+      <created>1669111785604</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669111785604</updated>
+    </task>
+    <task id="LOCAL-00004" summary="plot rpc">
+      <created>1669111802615</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669111802615</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
