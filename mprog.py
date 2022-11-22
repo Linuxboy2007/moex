@@ -31,19 +31,19 @@ processed_dest = join(path, start_date + "_" + end_date,
                       'processed')  # каталог для хранения обработанных данных инструментов
 ticks_path = join(path, 'SECID' + '.txt')  # путь для файла со списком инструментов
 if isdir(moex_dest):
-    print("MOEX indices downloaded")
+    print("MOEX indices already downloaded")
 else:
     moexl.dmei(moex_dest, start_date, end_date)
 
 '''  Список secid инструментов '''
 instrument_tickers = ["ABRD", "ACKO", "AFKS", "AFLT", "AGRO", "AKRN"]
 if isdir(data_dest):
-    print("Instruments indices downloaded")
+    print("Instruments indices already downloaded")
 else:
     moexl.qoutes_download(instrument_tickers, data_dest, start_date, end_date)
 
 if isdir(processed_dest):
-    print("Instruments data processed")
+    print("Instruments data already processed")
 else:
     pathlib.Path(processed_dest).mkdir(parents=True, exist_ok=True)
     '''
