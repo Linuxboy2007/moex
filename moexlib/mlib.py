@@ -30,15 +30,15 @@ end_date - period end date
             start=start_date,
             end=end_date,
         )
-    data = data[['SECID', 'SHORTNAME', 'OPEN', 'CLOSE', 'HIGH', 'LOW']]
-    data['MEAN'] = np.array(data.iloc[:, 2:5].mean(1))
-    data['RPC'] = 0
-    data.iloc[1:, 7] = [(data.iloc[i, 6] - data.iloc[i - 1, 6]) / data.iloc[i - 1, 6]
-                        for i in range(1, data.shape[0])]
-    dest = join(moex_dest, ticker + '.csv')
-    print("Writing %s -> %s" % (ticker, moex_dest))
-    data.to_csv(dest, index_label='day',
-                columns=arguments, encoding='utf-8-sig')
+        data = data[['SECID', 'SHORTNAME', 'OPEN', 'CLOSE', 'HIGH', 'LOW']]
+        data['MEAN'] = np.array(data.iloc[:, 2:5].mean(1))
+        data['RPC'] = 0
+        data.iloc[1:, 7] = [(data.iloc[i, 6] - data.iloc[i - 1, 6]) / data.iloc[i - 1, 6]
+                            for i in range(1, data.shape[0])]
+        dest = join(moex_dest, ticker + '.csv')
+        print("Writing %s -> %s" % (ticker, moex_dest))
+        data.to_csv(dest, index_label='day',
+                    columns=arguments, encoding='utf-8-sig')
 
 
 def qoutes_download(instrument_tickers, data_dest, start_date, end_date):
