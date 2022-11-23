@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e9457da-9b85-4e88-9718-966d1e0af118" name="Changes" comment="plot rpc">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moexlib/mlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/moexlib/mlib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mprog.py" beforeDir="false" afterPath="$PROJECT_DIR$/mprog.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +76,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669114323699</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="plot rpc">
+      <created>1669200204953</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1669200204953</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

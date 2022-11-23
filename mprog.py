@@ -21,8 +21,8 @@ import moexlib.mlib as moexl
 
 warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 # Период времени
-start_date = '2022-08-29'
-end_date = '2022-09-30'
+start_date = '2022-11-01'
+end_date = '2022-11-22'
 
 path = r'c:\stock data'  # корневой каталог для сохрания информации
 moex_dest = join(path, start_date + "_" + end_date, 'moexdata')  # каталог для индексов МосБиржи
